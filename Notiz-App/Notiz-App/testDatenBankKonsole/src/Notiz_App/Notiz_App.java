@@ -20,7 +20,7 @@ public class Notiz_App {
 
             //Class.forName("com.mysql.jdbc.Driver");
 
-            String connectionURL = "jdbc:mysql://localhost:3306/bundesliga";
+            String connectionURL = "jdbc:mysql://localhost:3306/notizen";
             String user = "root";
             String password = "";
 
