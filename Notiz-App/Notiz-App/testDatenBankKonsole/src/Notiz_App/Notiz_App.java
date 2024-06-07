@@ -5,11 +5,17 @@
  */
 package Notiz_App;
 import java.sql.*;
+import java.util.ArrayList;
 /**
  *
  * @author El
  */
 public class Notiz_App {
+    
+        public static  String connectionURL = "jdbc:mysql://localhost:3306/notizen";
+        public static  String user = "root";
+        public static  String password = "";
+    
 
     /**
      * @param args the command line arguments
@@ -20,14 +26,11 @@ public class Notiz_App {
 
             //Class.forName("com.mysql.jdbc.Driver");
 
-            String connectionURL = "jdbc:mysql://localhost:3306/notizen";
-            String user = "root";
-            String password = "";
-
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
 
             if (verbindung.isValid(2)) {
                 System.out.println("Verbindung aufgebaut!");
+                new GUI().setVisible(true);
             } else {
                 System.out.println("Fehler beim Aufbau der Verbindung!");
             }
@@ -39,21 +42,24 @@ public class Notiz_App {
             }
              // SQL Statement erstellen
             Statement statement = verbindung.createStatement();
+            
             // Statement an die DB schicken, ResultSet speichern
-            ResultSet dasResultSet = statement.executeQuery("SELECT * FROM liga;");
+            ResultSet ergebnisse = statement.executeQuery("SELECT * FROM notiz;");
+            
+            
             
             // Meta-Daten des Resultsets auslesen, z.B. Spaltenanzahl
-            ResultSetMetaData metaDaten = dasResultSet.getMetaData();
+            ResultSetMetaData metaDaten = ergebnisse.getMetaData();
             int anzSpalten = metaDaten.getColumnCount();    
             System.out.println("Anzahl Spalten: "+anzSpalten);
             
             // Zeilenweise das ResultSet auslesen
-            while(dasResultSet.next())
+            while(ergebnisse.next())
             {
                 // Lies Inhalt der einzelnen Spalten aus
                 for(int i = 1; i <= anzSpalten; i++)
                 {
-                   System.out.print(dasResultSet.getString(i)+", "); 
+                   System.out.print(ergebnisse.getString(i)+", "); 
                 }
                 System.out.print("\n");
             }
@@ -68,6 +74,30 @@ public class Notiz_App {
             System.out.println("SQLException beim Aufbau der Verbindung!");
         }
     
+    }
+        public static ArrayList<String> getData(){
+            ArrayList<String> daten = new ArrayList<String>();
+        try{
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+            Statement statement = verbindung.createStatement();
+            
+            ResultSet ergebnisse = statement.executeQuery("SELECT * FROM notiz;");  //Alle Spalten von notiz auslesen und in "ergebnisse speichern
+            ResultSetMetaData metaData = ergebnisse.getMetaData();
+            int anzSpalten = metaData.getColumnCount();
+            
+            while(ergebnisse.next())
+            {
+                // Lies Inhalt der einzelnen Spalten aus und speicher sie in Daten um sie zu übergeben
+                for(int i = 1; i <= anzSpalten; i++)
+                {
+                   daten.add(ergebnisse.getString(i)); 
+                }
+            }
+            
+        }catch(SQLException ex) {System.out.println("SQLException beim Aufbau der Verbindung!");}
+        
+        
+        return daten;
     }
     
 }

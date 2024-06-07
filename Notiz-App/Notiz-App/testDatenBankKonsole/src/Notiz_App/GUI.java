@@ -5,6 +5,8 @@
  */
 package Notiz_App;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Benjamin
@@ -31,8 +33,9 @@ public class GUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnEdit = new javax.swing.JButton();
-        btnLöschen = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        btnLoeschen = new javax.swing.JButton();
+        tfBeschreibung = new javax.swing.JTextField();
+        laNotizID = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -47,17 +50,24 @@ public class GUI extends javax.swing.JFrame {
         jLabel1.setText("Überschrift");
 
         btnEdit.setText("...");
-
-        btnLöschen.setText("-");
-
-        jTextField1.setColumns(1);
-        jTextField1.setToolTipText("Hier Notiz beschreiben");
-        jTextField1.setName("tfBeschreibung"); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                btnEditActionPerformed(evt);
             }
         });
+
+        btnLoeschen.setText("-");
+
+        tfBeschreibung.setColumns(1);
+        tfBeschreibung.setToolTipText("Hier Notiz beschreiben");
+        tfBeschreibung.setName("tfBeschreibung"); // NOI18N
+        tfBeschreibung.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tfBeschreibungActionPerformed(evt);
+            }
+        });
+
+        laNotizID.setText("#1");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,11 +76,12 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
+                    .addComponent(tfBeschreibung)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 341, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(btnLöschen)
+                        .addComponent(laNotizID)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnLoeschen)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnEdit)))
                 .addContainerGap())
@@ -81,15 +92,22 @@ public class GUI extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
+                .addComponent(tfBeschreibung, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnLöschen))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnLoeschen))
+                    .addComponent(laNotizID, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addContainerGap())
         );
 
         jButton1.setText("+");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,9 +140,22 @@ public class GUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void tfBeschreibungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfBeschreibungActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_tfBeschreibungActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        ArrayList<String> d =(Notiz_App.getData());
+        for (int i = 0; i < d.size() ; i++) {
+            System.out.println(d.get(i));
+            tfBeschreibung.setText(tfBeschreibung.getText() + "|" +d.get(i));
+           
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,11 +194,12 @@ public class GUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnEdit;
-    private javax.swing.JButton btnLöschen;
+    private javax.swing.JButton btnLoeschen;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel jlNotizen;
+    private javax.swing.JLabel laNotizID;
+    private javax.swing.JTextField tfBeschreibung;
     // End of variables declaration//GEN-END:variables
 }

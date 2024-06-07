@@ -84,11 +84,12 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jTextField1" max="32767" attributes="0"/>
+                      <Component id="tfBeschreibung" max="32767" attributes="0"/>
                       <Component id="jLabel1" alignment="0" pref="341" max="32767" attributes="0"/>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                          <Component id="btnLöschen" min="-2" max="-2" attributes="0"/>
+                          <Component id="laNotizID" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="btnLoeschen" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="btnEdit" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -103,11 +104,14 @@
                   <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" pref="31" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jTextField1" pref="149" max="32767" attributes="0"/>
+                  <Component id="tfBeschreibung" pref="149" max="32767" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="btnEdit" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                      <Component id="btnLöschen" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="btnEdit" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                          <Component id="btnLoeschen" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Component id="laNotizID" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -127,21 +131,29 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="..."/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEditActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="btnL&#xf6;schen">
+        <Component class="javax.swing.JButton" name="btnLoeschen">
           <Properties>
             <Property name="text" type="java.lang.String" value="-"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTextField1">
+        <Component class="javax.swing.JTextField" name="tfBeschreibung">
           <Properties>
             <Property name="columns" type="int" value="1"/>
             <Property name="toolTipText" type="java.lang.String" value="Hier Notiz beschreiben"/>
             <Property name="name" type="java.lang.String" value="tfBeschreibung" noResource="true"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextField1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tfBeschreibungActionPerformed"/>
           </Events>
+        </Component>
+        <Component class="javax.swing.JLabel" name="laNotizID">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="#1"/>
+          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -149,6 +161,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="+"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>
