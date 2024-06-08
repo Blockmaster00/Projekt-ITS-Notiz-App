@@ -31,17 +31,12 @@ DROP TABLE IF EXISTS `notiz`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Notiz` (
-  `Ueberschrift` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `Beschreibung` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-     Notiz_ID integer auto_increment,PRIMARY KEY (`Notiz_ID`)
+	`Ueberschrift` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+	`Beschreibung` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+	`Notiz_ID` int NOT NULL auto_increment,
+     PRIMARY KEY (`Notiz_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
--- CREATE TABLE Notiz2(NotizID Integer AUTO_INCREMENT, primary key (NotizID)); von felix
 
-LOCK TABLES `notiz` WRITE;
-/*!40000 ALTER TABLE `notiz` DISABLE KEYS */;
-INSERT INTO `notiz` VALUES ("Test Notiz",'Diese Notiz ist ein Test',1);
-INSERT INTO `notiz` VALUES ("Test Notiz2",'Diese Notiz ist vielleicht ein Test',2);
-/*!40000 ALTER TABLE `notiz` ENABLE KEYS */;
-UNLOCK TABLES;
+

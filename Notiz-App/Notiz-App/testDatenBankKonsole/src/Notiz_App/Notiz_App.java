@@ -21,67 +21,16 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
-         try {
-
-            //Class.forName("com.mysql.jdbc.Driver");
-
-            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
-
-            if (verbindung.isValid(2)) {
-                System.out.println("Verbindung aufgebaut!");
-                new GUI().setVisible(true);
-            } else {
-                System.out.println("Fehler beim Aufbau der Verbindung!");
-            }
-       
-             if (verbindung.isClosed()){
-                System.out.println("Verbindung ist geschlossen");
-            } else {
-                System.out.println("Verbindung ist offen");
-            }
-             // SQL Statement erstellen
-            Statement statement = verbindung.createStatement();
-            
-            // Statement an die DB schicken, ResultSet speichern
-            ResultSet ergebnisse = statement.executeQuery("SELECT * FROM notiz;");
-            
-            
-            
-            // Meta-Daten des Resultsets auslesen, z.B. Spaltenanzahl
-            ResultSetMetaData metaDaten = ergebnisse.getMetaData();
-            int anzSpalten = metaDaten.getColumnCount();    
-            System.out.println("Anzahl Spalten: "+anzSpalten);
-            
-            // Zeilenweise das ResultSet auslesen
-            while(ergebnisse.next())
-            {
-                // Lies Inhalt der einzelnen Spalten aus
-                for(int i = 1; i <= anzSpalten; i++)
-                {
-                   System.out.print(ergebnisse.getString(i)+", "); 
-                }
-                System.out.print("\n");
-            }
-             verbindung.close();
-             
-              if (verbindung.isClosed()){
-                System.out.println("Verbindung ist geschlossen");
-            } else {
-                System.out.println("Verbindung ist offen");
-            }
-        } catch (SQLException ex) {            
-            System.out.println("SQLException beim Aufbau der Verbindung!");
-        }
-    
+        new GUI().setVisible(true);
     }
-        public static ArrayList<String> getData(){
+    
+    public static ArrayList<String> getData(){
             ArrayList<String> daten = new ArrayList<String>();
         try{
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
             Statement statement = verbindung.createStatement();
             
-            ResultSet ergebnisse = statement.executeQuery("SELECT * FROM notiz;");  //Alle Spalten von notiz auslesen und in "ergebnisse speichern
+            ResultSet ergebnisse = statement.executeQuery("SELECT * FROM notiz;");  //Alle Spalten von notiz auslesen und in "ergebnisse" speichern
             ResultSetMetaData metaData = ergebnisse.getMetaData();
             int anzSpalten = metaData.getColumnCount();
             
@@ -93,11 +42,30 @@ public class Notiz_App {
                    daten.add(ergebnisse.getString(i)); 
                 }
             }
-            
+            verbindung.close();
         }catch(SQLException ex) {System.out.println("SQLException beim Aufbau der Verbindung!");}
         
         
         return daten;
     }
+    
+    public static void addNotiz(String ueberschrift, String beschreibung){
+            
+                try{
+                Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+                Statement statement = verbindung.createStatement();
+            
+                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung) VALUES (?, ?)";
+                PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+            
+                preparedStatement.setString(1, ueberschrift);
+                preparedStatement.setString(2, beschreibung);
+                preparedStatement.executeUpdate();
+            
+                verbindung.close();
+                }catch(SQLException ex){System.out.println("SQLException beim Aufbau der Verbindung!");}
+            
+            
+        }
     
 }
