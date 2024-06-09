@@ -26,14 +26,14 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Beispiel");
+        JFrame frame = new JFrame("Notizen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
         JPanel panelContainer = new JPanel();
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
 
-        JButton button = new JButton("Neues Notiz hinzufügen");
+        JButton button = new JButton("Neue Notiz hinzufügen");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
