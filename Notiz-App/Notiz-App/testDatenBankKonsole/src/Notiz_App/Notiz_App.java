@@ -4,8 +4,13 @@
  * and open the template in the editor.
  */
 package Notiz_App;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
+import javax.swing.*;
 /**
  *
  * @author El
@@ -21,7 +26,40 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new GUI().setVisible(true);
+        JFrame frame = new JFrame("Beispiel");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(new BorderLayout());
+
+        JPanel panelContainer = new JPanel();
+        panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
+
+        JButton button = new JButton("Neues Notiz hinzufügen");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JPanel newPanel = new JPanel();
+                newPanel.setName("Notiz" + addNotiz("Test", "hilfe"));
+                newPanel.add(new JLabel(newPanel.getName()));
+
+                JButton deleteButton = new JButton("Löschen");
+                deleteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        panelContainer.remove(newPanel);
+                        frame.pack();
+                    }
+                });
+                newPanel.add(deleteButton);
+
+                panelContainer.add(newPanel);
+                frame.pack();
+            }
+        });
+
+        frame.add(button, BorderLayout.NORTH);
+        frame.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
+        frame.pack();
+        frame.setVisible(true);
     }
     
     public static ArrayList<String> getData(){
@@ -49,23 +87,39 @@ public class Notiz_App {
         return daten;
     }
     
-    public static void addNotiz(String ueberschrift, String beschreibung){
+    public static int addNotiz(String ueberschrift, String beschreibung){
             
                 try{
-                Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
-                Statement statement = verbindung.createStatement();
+                    Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+                    Statement statement = verbindung.createStatement();
             
-                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung) VALUES (?, ?)";
-                PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+                    String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung) VALUES (?, ?)";
+                    PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
             
-                preparedStatement.setString(1, ueberschrift);
-                preparedStatement.setString(2, beschreibung);
-                preparedStatement.executeUpdate();
-            
-                verbindung.close();
+                    preparedStatement.setString(1, ueberschrift);
+                    preparedStatement.setString(2, beschreibung);
+                    preparedStatement.executeUpdate();
+                
+                    verbindung.close();
                 }catch(SQLException ex){System.out.println("SQLException beim Aufbau der Verbindung!");}
-            
+                
+                try{
+                    int anzahlNotizen = 0;
+                    Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+                    Statement statement = verbindung.createStatement();
+                
+                    ResultSet ergebnisse = statement.executeQuery("SELECT Count(Notiz_ID) FROM notiz;");  
+                    while(ergebnisse.next()){
+                    anzahlNotizen = ergebnisse.getInt(1);
+                    }
+                    verbindung.close();
+                
+                    return anzahlNotizen;
+                }catch(SQLException ex){System.out.println("SQLException beim getten der ID's");}
+                
+            return -1;
             
         }
+
     
 }
