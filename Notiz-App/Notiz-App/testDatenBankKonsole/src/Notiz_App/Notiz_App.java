@@ -33,7 +33,13 @@ public class Notiz_App {
         JPanel panelContainer = new JPanel();
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
 
+        JPanel eingabePanel = new JPanel();
+        eingabePanel.add(new javax.swing.JTextField(TextFeld));
+        TextFeld.setText("jTextField1");
+
+
         JButton button = new JButton("Neue Notiz hinzufügen");
+
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
