@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 /**
  *
- * @author El
+ * @author Benjamin, Florian
  */
 public class Notiz_App {
     
@@ -26,49 +26,7 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Notizen");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        JPanel panelContainer = new JPanel();
-        panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
-/*
-        JPanel eingabePanel = new JPanel();
-        eingabePanel.add(new javax.swing.JTextField(TextFeld));
-        TextFeld.setText("jTextField1");
-*/
-
-
-        JButton button = new JButton("Neue Notiz hinzufügen");
-
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JPanel newPanel = new JPanel();
-                newPanel.setName(String.valueOf(addNotiz("Test", "hilfe")));
-                newPanel.add(new JLabel(newPanel.getName()));
-                
-                JButton editButton = new JButton("Bearbeiten");
-                JButton deleteButton = new JButton("Löschen");
-                deleteButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        panelContainer.remove(newPanel);
-                        deleteNotiz(Integer.valueOf(newPanel.getName()));
-                        frame.pack();
-                    }
-                });
-                newPanel.add(deleteButton);
-                newPanel.add(editButton);
-                panelContainer.add(newPanel);
-                frame.pack();
-            }
-        });
-
-        frame.add(button, BorderLayout.NORTH);
-        frame.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
+        GUI.init();
     }
     
     public static ArrayList<String> getData(){
@@ -144,6 +102,7 @@ public class Notiz_App {
 
           
 }
+/*
         public static void init(){
                 try{
                 int anzahlNotizen;
@@ -178,6 +137,6 @@ public class Notiz_App {
                 verbindung.close();
                 }catch(SQLException ex){System.out.println("SQLException beim Initialisieren der Notizen");}
         }
-
+*/
     
 }
