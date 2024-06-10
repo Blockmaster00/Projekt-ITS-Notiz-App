@@ -26,7 +26,6 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        deleteNotiz(25);
         JFrame frame = new JFrame("Notizen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -46,19 +45,21 @@ public class Notiz_App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newPanel = new JPanel();
-                newPanel.setName("Notiz" + addNotiz("Test", "hilfe"));
+                newPanel.setName(String.valueOf(addNotiz("Test", "hilfe")));
                 newPanel.add(new JLabel(newPanel.getName()));
-
+                
+                JButton editButton = new JButton("Bearbeiten");
                 JButton deleteButton = new JButton("Löschen");
                 deleteButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         panelContainer.remove(newPanel);
+                        deleteNotiz(Integer.valueOf(newPanel.getName()));
                         frame.pack();
                     }
                 });
                 newPanel.add(deleteButton);
-
+                newPanel.add(editButton);
                 panelContainer.add(newPanel);
                 frame.pack();
             }
@@ -112,17 +113,17 @@ public class Notiz_App {
                 }catch(SQLException ex){System.out.println("SQLException beim Aufbau der Verbindung!");}
                 
                 try{
-                    int anzahlNotizen = 0;
+                    int Notiz_ID = 0;
                     Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
                     Statement statement = verbindung.createStatement();
                 
-                    ResultSet ergebnisse = statement.executeQuery("SELECT Count(Notiz_ID) FROM notiz;");  
+                    ResultSet ergebnisse = statement.executeQuery("SELECT MAX(Notiz_ID) FROM notiz;");  
                     while(ergebnisse.next()){
-                    anzahlNotizen = ergebnisse.getInt(1);
+                    Notiz_ID = ergebnisse.getInt(1);
                     }
                     verbindung.close();
                 
-                    return anzahlNotizen;
+                    return Notiz_ID;
                 }catch(SQLException ex){System.out.println("SQLException beim getten der ID's");}
                 
             return -1;
@@ -143,6 +144,40 @@ public class Notiz_App {
 
           
 }
+        public static void init(){
+                try{
+                int anzahlNotizen;
+                    Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+                    Statement statement = verbindung.createStatement();
+
+                    ResultSet ergebnisse = statement.executeQuery("SELECT Count(Notiz_ID) FROM notiz;");
+                    while(ergebnisse.next()){
+                    anzahlNotizen = ergebnisse.getInt(1);
+                    }
+                    
+                    for(int i = 0; i < anzahlNotizen; i++){
+                JPanel newPanel = new JPanel();
+                newPanel.setName(String.valueOf(addNotiz("Test", "hilfe")));
+                newPanel.add(new JLabel(newPanel.getName()));
+                
+                JButton editButton = new JButton("Bearbeiten");
+                JButton deleteButton = new JButton("Löschen");
+                deleteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        panelContainer.remove(newPanel);
+                        deleteNotiz(Integer.valueOf(newPanel.getName()));
+                        frame.pack();
+                    }
+                });
+                newPanel.add(deleteButton);
+                newPanel.add(editButton);
+                panelContainer.add(newPanel);
+                frame.pack();
+                }
+                verbindung.close();
+                }catch(SQLException ex){System.out.println("SQLException beim Initialisieren der Notizen");}
+        }
 
     
 }
