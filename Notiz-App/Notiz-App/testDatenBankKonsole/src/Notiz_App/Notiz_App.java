@@ -124,7 +124,7 @@ public class Notiz_App {
                     verbindung.close();
                 
                     return Notiz_ID;
-                }catch(SQLException ex){System.out.println("SQLException beim getten der ID's");}
+                }catch(SQLException ex){System.out.println("SQLException beim getten der ID");}
                 
             return -1;
             
