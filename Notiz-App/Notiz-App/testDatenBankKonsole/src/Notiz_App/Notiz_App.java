@@ -26,16 +26,18 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        deleteNotiz(25);
         JFrame frame = new JFrame("Notizen");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
         JPanel panelContainer = new JPanel();
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
-
+/*
         JPanel eingabePanel = new JPanel();
         eingabePanel.add(new javax.swing.JTextField(TextFeld));
         TextFeld.setText("jTextField1");
+*/
 
 
         JButton button = new JButton("Neue Notiz hinzufügen");
@@ -128,17 +130,16 @@ public class Notiz_App {
         }  
         
         public static void deleteNotiz(int notiz_ID) {
- try{
+            try{
                 Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
-                Statement statement = verbindung.createStatement();
 
-                String sql = "DELETE FROM Notizen Where notiz_ID = (?)";
+                String sql = "DELETE FROM notiz Where notiz_ID = (?)";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
                 preparedStatement.setInt(1, notiz_ID);
                 preparedStatement.executeUpdate();
                 verbindung.close();
-}catch(SQLException ex){System.out.println("SQLException beim Löschen der Notizen");}
+            }catch(SQLException ex){System.out.println("SQLException beim Löschen der Notizen");}
 
           
 }
