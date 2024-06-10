@@ -102,41 +102,6 @@ public class Notiz_App {
 
           
 }
-/*
-        public static void init(){
-                try{
-                int anzahlNotizen;
-                    Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
-                    Statement statement = verbindung.createStatement();
 
-                    ResultSet ergebnisse = statement.executeQuery("SELECT Count(Notiz_ID) FROM notiz;");
-                    while(ergebnisse.next()){
-                    anzahlNotizen = ergebnisse.getInt(1);
-                    }
-                    
-                    for(int i = 0; i < anzahlNotizen; i++){
-                JPanel newPanel = new JPanel();
-                newPanel.setName(String.valueOf(addNotiz("Test", "hilfe")));
-                newPanel.add(new JLabel(newPanel.getName()));
-                
-                JButton editButton = new JButton("Bearbeiten");
-                JButton deleteButton = new JButton("Löschen");
-                deleteButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        panelContainer.remove(newPanel);
-                        deleteNotiz(Integer.valueOf(newPanel.getName()));
-                        frame.pack();
-                    }
-                });
-                newPanel.add(deleteButton);
-                newPanel.add(editButton);
-                panelContainer.add(newPanel);
-                frame.pack();
-                }
-                verbindung.close();
-                }catch(SQLException ex){System.out.println("SQLException beim Initialisieren der Notizen");}
-        }
-*/
     
 }

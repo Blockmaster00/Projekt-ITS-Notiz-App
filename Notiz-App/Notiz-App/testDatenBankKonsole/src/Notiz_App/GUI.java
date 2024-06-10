@@ -17,16 +17,23 @@ import javax.swing.*;
  * @author benjamin.heinold
  */
 public class GUI {
+    static JFrame frame = new JFrame("Notizen");
+    static JPanel panelContainer = new JPanel();
+
+    public static  String connectionURL = "jdbc:mysql://localhost:3306/notizen";
+    public static  String user = "root";
+    public static  String password = "";
+
     public static void main(String[] args) {
         
         }
 
     public static void init(){
-    JFrame frame = new JFrame("Notizen");
+    
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
 
-        JPanel panelContainer = new JPanel();
+        
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
 /*
         JPanel eingabePanel = new JPanel();
@@ -64,6 +71,58 @@ public class GUI {
         frame.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
+        
+        getNotizen();
     }
+
+    public static void getNotizen(){
+                try{
+                    ArrayList<String> notizID = new ArrayList<String>();
+
+                    Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+                    Statement statement = verbindung.createStatement();
+
+                    ResultSet ergebnisse = statement.executeQuery("SELECT Notiz_ID FROM notiz;");
+
+                    ResultSetMetaData metaData = ergebnisse.getMetaData();
+
+                    int anzSpalten = 0;
+                    
+                    
+                    while(ergebnisse.next()){
+                    anzSpalten++;
+                    }
+                    System.out.println(anzSpalten);
+
+                    for(int i = 1; i <= anzSpalten; i++){
+                        notizID.add(ergebnisse.getString(i));
+                        System.out.println(notizID.get(i-1));
+                    }
+                        
+                    
+                    
+                    for(int i = 0; i < anzSpalten; i++){
+                JPanel newPanel = new JPanel();
+                newPanel.setName(notizID.get(i));
+                newPanel.add(new JLabel(newPanel.getName()));
+                
+                JButton editButton = new JButton("Bearbeiten");
+                JButton deleteButton = new JButton("Löschen");
+                deleteButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        panelContainer.remove(newPanel);
+                        Notiz_App.deleteNotiz(Integer.valueOf(newPanel.getName()));
+                        frame.pack();
+                    }
+                });
+                newPanel.add(deleteButton);
+                newPanel.add(editButton);
+                panelContainer.add(newPanel);
+                frame.pack();
+                }
+                verbindung.close();
+                }catch(SQLException ex){System.out.println("SQLException beim Initialisieren der Notizen");}
+        }
 }   
 
