@@ -91,12 +91,12 @@ public class GUI {
                     
                     while(ergebnisse.next()){
                     anzSpalten++;
-                    }
+                    
                     System.out.println(anzSpalten);
 
-                    for(int i = 1; i <= anzSpalten; i++){
-                        notizID.add(ergebnisse.getString(i));
-                        System.out.println(notizID.get(i-1));
+                    
+                        notizID.add(ergebnisse.getString(anzSpalten-1));
+                        System.out.println(notizID.get(anzSpalten-1));
                     }
                         
                     
