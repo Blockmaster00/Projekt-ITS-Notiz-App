@@ -35,15 +35,11 @@ public class GUI {
         frame.setLayout(new BorderLayout());
 
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
-        /*
-         * JPanel eingabePanel = new JPanel();
-         * eingabePanel.add(new javax.swing.JTextField(TextFeld));
-         * TextFeld.setText("jTextField1");
-         */
+        
 
-        JButton button = new JButton("Neue Notiz hinzufügen");
+        JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
 
-        button.addActionListener(new ActionListener() {
+        btnaddNotiz.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newPanel = new JPanel();
@@ -67,7 +63,7 @@ public class GUI {
             }
         });
 
-        frame.add(button, BorderLayout.NORTH);
+        frame.add(btnaddNotiz, BorderLayout.NORTH);
         frame.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
         frame.pack();
         frame.setVisible(true);
