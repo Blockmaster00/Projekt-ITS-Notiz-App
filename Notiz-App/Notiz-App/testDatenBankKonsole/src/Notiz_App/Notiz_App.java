@@ -5,12 +5,8 @@
  */
 package Notiz_App;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
-import javax.swing.*;
 
 /**
  *
@@ -70,7 +66,7 @@ public class Notiz_App {
 
             verbindung.close();
         } catch (SQLException ex) {
-            System.out.println("SQLException beim Aufbau der Verbindung!");
+            System.out.println("SQLException beim Adden der Notiz");
         }
 
         try {
@@ -97,7 +93,7 @@ public class Notiz_App {
         try {
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
 
-            String sql = "DELETE FROM notiz Where notiz_ID = (?)";
+            String sql = "DELETE FROM notiz Where Notiz_ID = (?)";
             PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
             preparedStatement.setInt(1, notiz_ID);
@@ -108,5 +104,24 @@ public class Notiz_App {
         }
 
     }
+    
+    public static void updateNotiz(String ueberschrift, String beschreibung, int id) {
 
+        try {
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+            Statement statement = verbindung.createStatement();
+
+            String sql = "UPDATE notiz SET Ueberschrift = ?, Beschreibung = ? WHERE Notiz_ID = ?";
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, ueberschrift);
+            preparedStatement.setString(2, beschreibung);
+            preparedStatement.setString(3, String.valueOf(id));
+            preparedStatement.executeUpdate();
+
+            verbindung.close();
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim Bearbeiten der Notiz");
+        }
+    }
 }
