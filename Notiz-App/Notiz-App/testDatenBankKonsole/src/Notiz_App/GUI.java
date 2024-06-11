@@ -18,8 +18,9 @@ import javax.swing.*;
  * @author benjamin.heinold
  */
 public class GUI {
-    static JFrame frame = new JFrame("Notizen");
+    static JFrame GUI = new JFrame("Notizen");
     static JPanel panelContainer = new JPanel();
+    static JPanel eingabefeld = new JPanel();
 
     public static String connectionURL = "jdbc:mysql://localhost:3306/notizen";
     public static String user = "root";
@@ -31,13 +32,29 @@ public class GUI {
 
     public static void init() {
 
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
+        GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        GUI.setLayout(new BorderLayout());
+        
+        eingabefeld.setLayout(new BoxLayout(eingabefeld, BoxLayout.Y_AXIS));
+        
+        JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
+        //btnaddNotiz.setHorizontalAlignment(JButton.CENTER);
+        JLabel lUeberschrift = new JLabel("Überschrift:");
+        JTextField tfUeberschrift = new JTextField("Überschrift",1);
+        JLabel lBeschreibung = new JLabel("Beschreibung:");
+        JTextArea taBeschreibung = new JTextArea(3,1);
+        
+        eingabefeld.add(btnaddNotiz);
+        btnaddNotiz.setHorizontalAlignment(JButton.LEFT);
+        eingabefeld.add(lUeberschrift);
+        eingabefeld.add(tfUeberschrift);
+        eingabefeld.add(lBeschreibung);
+        eingabefeld.add(taBeschreibung);
+        JScrollPane scrollpane = new JScrollPane(taBeschreibung);
+        eingabefeld.add(scrollpane);
 
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
         
-
-        JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
 
         btnaddNotiz.addActionListener(new ActionListener() {
             @Override
@@ -53,20 +70,20 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         panelContainer.remove(newPanel);
                         Notiz_App.deleteNotiz(Integer.valueOf(newPanel.getName()));
-                        frame.pack();
+                        GUI.pack();
                     }
                 });
                 newPanel.add(deleteButton);
                 newPanel.add(editButton);
                 panelContainer.add(newPanel);
-                frame.pack();
+                GUI.pack();
             }
         });
 
-        frame.add(btnaddNotiz, BorderLayout.NORTH);
-        frame.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
-        frame.pack();
-        frame.setVisible(true);
+        GUI.add(eingabefeld,BorderLayout.NORTH);
+        GUI.add(new JScrollPane(panelContainer), BorderLayout.CENTER);
+        GUI.pack();
+        GUI.setVisible(true);
 
         getNotizen();
     }
@@ -80,20 +97,14 @@ public class GUI {
 
             ResultSet ergebnisse = statement.executeQuery("SELECT Notiz_ID FROM notiz;");
 
-            ResultSetMetaData metaData = ergebnisse.getMetaData();
 
-            int anzSpalten = 0;
-
+            int anzReihen = 0;
             while (ergebnisse.next()) {
-                anzSpalten++;
-
-                
+                anzReihen++;
                 notizID.add(ergebnisse.getString(1));
-                System.out.println(notizID.get(anzSpalten-1));
-
             }
 
-            for (int i = 0; i < anzSpalten; i++) {
+            for (int i = 0; i < anzReihen; i++) {
                 JPanel newPanel = new JPanel();
                 newPanel.setName(notizID.get(i));
                 newPanel.add(new JLabel(newPanel.getName()));
@@ -105,13 +116,13 @@ public class GUI {
                     public void actionPerformed(ActionEvent e) {
                         panelContainer.remove(newPanel);
                         Notiz_App.deleteNotiz(Integer.valueOf(newPanel.getName()));
-                        frame.pack();
+                        GUI.pack();
                     }
                 });
                 newPanel.add(deleteButton);
                 newPanel.add(editButton);
                 panelContainer.add(newPanel);
-                frame.pack();
+                GUI.pack();
             }
             verbindung.close();
         } catch (SQLException ex) {
