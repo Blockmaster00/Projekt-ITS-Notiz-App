@@ -1,6 +1,5 @@
 
 import java.awt.*;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.*;
@@ -24,7 +23,7 @@ public class Notizen_UI {
 
     }
 
-    public static void init() {
+    public static void init() { // Initialisierung der GUI, erstes erstellen des Eingabefeldes und Buttons
 
         GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GUI.setLayout(new BorderLayout());
@@ -50,20 +49,14 @@ public class Notizen_UI {
         btnaddNotiz.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel newPanel = new JPanel();
-                newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
+                JPanel newPanel = new JPanel(); // neues Feld für Notiz wird erstellt
+                newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
+                                                                               // damit alles ordentlich angezeigt wird
 
-                newPanel.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText()))); // Neue
-                                                                                                                    // Notiz
-                                                                                                                    // erstellen
-                                                                                                                    // mit
-                                                                                                                    // Überschrift
-                                                                                                                    // und
-                                                                                                                    // Beschreibung
-                                                                                                                    // von
-                                                                                                                    // den
-                                                                                                                    // Eingabefeldern
-                newPanel.add(new JLabel(newPanel.getName(), JLabel.RIGHT));
+                newPanel.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText())));
+                // Neue Notiz in der Datenbank erstellen mit der Überschrift und Beschreibung ^
+
+                newPanel.add(new JLabel(newPanel.getName()));
                 newPanel.add(new JLabel(tfUeberschrift.getText()));
                 newPanel.add(new JLabel(taBeschreibung.getText()));
 
