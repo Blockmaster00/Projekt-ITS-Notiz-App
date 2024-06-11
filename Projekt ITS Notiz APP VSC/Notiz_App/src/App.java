@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package Notiz_App;
 
 import java.sql.*;
 
@@ -11,7 +5,7 @@ import java.sql.*;
  *
  * @author Benjamin, Florian
  */
-public class Notiz_App {
+public class App {
 
     public static String connectionURL = "jdbc:mysql://localhost:3306/notizen";
     public static String user = "root";
@@ -21,7 +15,7 @@ public class Notiz_App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        GUI.init();
+        Notizen_UI.init();
     }
 
     public static int addNotiz(String ueberschrift, String beschreibung) {
