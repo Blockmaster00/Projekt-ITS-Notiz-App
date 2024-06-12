@@ -18,6 +18,54 @@ public class App {
         Notizen_UI.init();
     }
 
+    public static String getUeberschrift(int Notiz_ID) {
+        try {
+            String ueberschrift = "error";
+
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+
+            String sql = ("SELECT Ueberschrift FROM notiz WHERE notiz_ID = ?");
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, String.valueOf(Notiz_ID));
+            ResultSet ergebniss = preparedStatement.executeQuery();
+
+            while (ergebniss.next()) {
+                ueberschrift = ergebniss.getString(1);
+            }
+
+            return (ueberschrift);
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim getten der Überschrift");
+        }
+        return ("error2");
+
+    }
+
+    public static String getBeschreibung(int Notiz_ID) {
+        try {
+            String beschreibung = "error";
+
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+
+            String sql = ("SELECT Beschreibung FROM notiz WHERE notiz_ID = ?");
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, String.valueOf(Notiz_ID));
+            ResultSet ergebniss = preparedStatement.executeQuery();
+
+            while (ergebniss.next()) {
+                beschreibung = ergebniss.getString(1);
+            }
+
+            return (beschreibung);
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim getten der Beschreibung");
+        }
+        return ("error2");
+
+    }
+
     public static int addNotiz(String ueberschrift, String beschreibung) {
 
         try {
@@ -50,9 +98,7 @@ public class App {
         } catch (SQLException ex) {
             System.out.println("SQLException beim getten der ID");
         }
-
         return -1;
-
     }
 
     public static void deleteNotiz(int notiz_ID) {

@@ -56,17 +56,21 @@ public class Notizen_UI {
                 newPanel.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText())));
                 // Neue Notiz in der Datenbank erstellen mit der Überschrift und Beschreibung ^
 
-                newPanel.add(new JLabel(newPanel.getName()));
-                newPanel.add(new JLabel(tfUeberschrift.getText()));
-                newPanel.add(new JLabel(taBeschreibung.getText()));
+                JLabel lIdN = new JLabel(newPanel.getName());
+                JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
+                JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
+                newPanel.add(lIdN);
+                newPanel.add(lUeberschriftN);
+                newPanel.add(lBeschreibungN);
 
                 JButton btnEdit = new JButton("Bearbeiten");
                 btnEdit.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-
                         App.updateNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
                                 Integer.valueOf(newPanel.getName()));
+                        lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
+                        lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
                         GUI.pack();
                     }
                 });
@@ -120,17 +124,22 @@ public class Notizen_UI {
                 newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
 
                 newPanel.setName(notizID.get(i));
-                newPanel.add(new JLabel(newPanel.getName()));
 
-                newPanel.add(new JLabel(ueberschrift.get(i)));
-                newPanel.add(new JLabel(beschreibung.get(i)));
+                JLabel lIdN = new JLabel(newPanel.getName());
+                JLabel lUeberschriftN = new JLabel(ueberschrift.get(i));
+                JLabel lBeschreibungN = new JLabel(beschreibung.get(i));
+                newPanel.add(lIdN);
+                newPanel.add(lUeberschriftN);
+                newPanel.add(lBeschreibungN);
 
                 JButton btnEdit = new JButton("Bearbeiten");
                 btnEdit.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        // Notiz_App.updateNotiz(tfUeberschrift.getText(),
-                        // taBeschreibung.getText(),Integer.valueOf(newPanel.getName()));
+                        App.updateNotiz(lUeberschriftN.getText(),
+                                lBeschreibungN.getText(), Integer.valueOf(newPanel.getName()));
+                        lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
+                        lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
                         GUI.pack();
                     }
                 });
