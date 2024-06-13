@@ -106,60 +106,60 @@ public class Notizen_UI {
             ArrayList<String> ueberschrift = new ArrayList<String>();
             ArrayList<String> beschreibung = new ArrayList<String>();
 
-            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
-            Statement statement = verbindung.createStatement();
-
-            ResultSet ergebnisse = statement.executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID FROM notiz;");
-
-            int anzReihen = 0;
-            while (ergebnisse.next()) {
-                anzReihen++;
-                ueberschrift.add(ergebnisse.getString(1));
-                beschreibung.add(ergebnisse.getString(2));
-                notizID.add(ergebnisse.getString(3));
+            try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
+                Statement statement = verbindung.createStatement();
+                
+                ResultSet ergebnisse = statement.executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID FROM notiz;");
+                
+                int anzReihen = 0;
+                while (ergebnisse.next()) {
+                    anzReihen++;
+                    ueberschrift.add(ergebnisse.getString(1));
+                    beschreibung.add(ergebnisse.getString(2));
+                    notizID.add(ergebnisse.getString(3));
+                }
+                
+                for (int i = 0; i < anzReihen; i++) {
+                    JPanel newPanel = new JPanel();
+                    newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
+                    
+                    newPanel.setName(notizID.get(i));
+                    
+                    JLabel lIdN = new JLabel(newPanel.getName());
+                    JLabel lUeberschriftN = new JLabel(ueberschrift.get(i));
+                    JLabel lBeschreibungN = new JLabel(beschreibung.get(i));
+                    newPanel.add(lIdN);
+                    newPanel.add(lUeberschriftN);
+                    newPanel.add(lBeschreibungN);
+                    
+                    JButton btnEdit = new JButton("Bearbeiten");
+                    btnEdit.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            App.updateNotiz(lUeberschriftN.getText(),
+                                    lBeschreibungN.getText(), Integer.valueOf(newPanel.getName()));
+                            lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
+                            lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
+                            GUI.pack();
+                        }
+                    });
+                    JButton btnDelete = new JButton("Löschen");
+                    btnDelete.addActionListener(new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            panelContainer.remove(newPanel);
+                            App.deleteNotiz(Integer.valueOf(newPanel.getName()));
+                            GUI.pack();
+                        }
+                    });
+                    newPanel.add(btnDelete);
+                    newPanel.add(btnEdit);
+                    newPanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+                    
+                    panelContainer.add(newPanel);
+                    GUI.pack();
+                }
             }
-
-            for (int i = 0; i < anzReihen; i++) {
-                JPanel newPanel = new JPanel();
-                newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
-
-                newPanel.setName(notizID.get(i));
-
-                JLabel lIdN = new JLabel(newPanel.getName());
-                JLabel lUeberschriftN = new JLabel(ueberschrift.get(i));
-                JLabel lBeschreibungN = new JLabel(beschreibung.get(i));
-                newPanel.add(lIdN);
-                newPanel.add(lUeberschriftN);
-                newPanel.add(lBeschreibungN);
-
-                JButton btnEdit = new JButton("Bearbeiten");
-                btnEdit.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        App.updateNotiz(lUeberschriftN.getText(),
-                                lBeschreibungN.getText(), Integer.valueOf(newPanel.getName()));
-                        lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
-                        lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
-                        GUI.pack();
-                    }
-                });
-                JButton btnDelete = new JButton("Löschen");
-                btnDelete.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        panelContainer.remove(newPanel);
-                        App.deleteNotiz(Integer.valueOf(newPanel.getName()));
-                        GUI.pack();
-                    }
-                });
-                newPanel.add(btnDelete);
-                newPanel.add(btnEdit);
-                newPanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-
-                panelContainer.add(newPanel);
-                GUI.pack();
-            }
-            verbindung.close();
         } catch (SQLException ex) {
             System.out.println("SQLException beim Initialisieren der Notizen");
         }
