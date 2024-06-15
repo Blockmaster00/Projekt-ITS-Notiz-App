@@ -10,14 +10,12 @@ import javax.swing.*;
  *
  * @author benjamin.heinold
  */
-public class Notizen_UI {
+public class Notizen_UI extends App {
     static JFrame GUI = new JFrame("Notizen");
     static JPanel panelContainer = new JPanel();
     static JPanel eingabefeld = new JPanel();
-
-    public static String connectionURL = "jdbc:mysql://localhost:3306/notizen";
-    public static String user = "root";
-    public static String password = "";
+    static JTextField tfUeberschrift; // Instanzvariable
+    static JTextArea taBeschreibung; // Instanzvariable
 
     public static void main(String[] args) {
 
@@ -32,9 +30,9 @@ public class Notizen_UI {
 
         JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
         JLabel lUeberschrift = new JLabel("Überschrift:");
-        JTextField tfUeberschrift = new JTextField("", 1);
+        tfUeberschrift = new JTextField("", 1); // Verwendung der Instanzvariable
         JLabel lBeschreibung = new JLabel("Beschreibung:");
-        JTextArea taBeschreibung = new JTextArea(3, 1);
+        taBeschreibung = new JTextArea(3, 1); // Verwendung der Instanzvariable
 
         eingabefeld.add(btnaddNotiz);
         eingabefeld.add(lUeberschrift);
@@ -49,45 +47,45 @@ public class Notizen_UI {
         btnaddNotiz.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JPanel newPanel = new JPanel(); // neues Feld für Notiz wird erstellt
-                newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
+                JPanel newNotiz = new JPanel(); // neues Feld für Notiz wird erstellt
+                newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
                                                                                // damit alles ordentlich angezeigt wird
 
-                newPanel.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText())));
+                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText())));
                 // Neue Notiz in der Datenbank erstellen mit der Überschrift und Beschreibung ^
 
-                JLabel lIdN = new JLabel(newPanel.getName());
+                JLabel lIdN = new JLabel(newNotiz.getName());
                 JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
                 JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
-                newPanel.add(lIdN);
-                newPanel.add(lUeberschriftN);
-                newPanel.add(lBeschreibungN);
+                newNotiz.add(lIdN);
+                newNotiz.add(lUeberschriftN);
+                newNotiz.add(lBeschreibungN);
 
                 JButton btnEdit = new JButton("Bearbeiten");
-                btnEdit.addActionListener(new ActionListener() {
+                btnEdit.addActionListener(new ActionListener() { // Button Bearbeiten
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         App.updateNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
-                                Integer.valueOf(newPanel.getName()));
-                        lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
-                        lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
+                                Integer.parseInt(newNotiz.getName()));
+                        lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
+                        lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
                         GUI.pack();
                     }
                 });
                 JButton btnDelete = new JButton("Löschen");
-                btnDelete.addActionListener(new ActionListener() {
+                btnDelete.addActionListener(new ActionListener() { // Button Löschen
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        panelContainer.remove(newPanel);
-                        App.deleteNotiz(Integer.valueOf(newPanel.getName()));
+                        App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
+                        panelContainer.remove(newNotiz);
                         GUI.pack();
                     }
                 });
-                newPanel.add(btnDelete);
-                newPanel.add(btnEdit);
-                newPanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+                newNotiz.add(btnDelete);
+                newNotiz.add(btnEdit);
+                newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 
-                panelContainer.add(newPanel);
+                panelContainer.add(newNotiz);
                 GUI.pack();
             }
         });
@@ -102,15 +100,16 @@ public class Notizen_UI {
 
     public static void getNotizen() {
         try {
-            ArrayList<String> notizID = new ArrayList<String>();
-            ArrayList<String> ueberschrift = new ArrayList<String>();
-            ArrayList<String> beschreibung = new ArrayList<String>();
+            ArrayList<String> notizID = new ArrayList<>();
+            ArrayList<String> ueberschrift = new ArrayList<>();
+            ArrayList<String> beschreibung = new ArrayList<>();
 
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 Statement statement = verbindung.createStatement();
-                
-                ResultSet ergebnisse = statement.executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID FROM notiz;");
-                
+
+                ResultSet ergebnisse = statement
+                        .executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID FROM notiz;");
+
                 int anzReihen = 0;
                 while (ergebnisse.next()) {
                     anzReihen++;
@@ -118,28 +117,28 @@ public class Notizen_UI {
                     beschreibung.add(ergebnisse.getString(2));
                     notizID.add(ergebnisse.getString(3));
                 }
-                
+
                 for (int i = 0; i < anzReihen; i++) {
-                    JPanel newPanel = new JPanel();
-                    newPanel.setLayout(new BoxLayout(newPanel, BoxLayout.Y_AXIS));
-                    
-                    newPanel.setName(notizID.get(i));
-                    
-                    JLabel lIdN = new JLabel(newPanel.getName());
+                    JPanel newNotiz = new JPanel();
+                    newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS));
+
+                    newNotiz.setName(notizID.get(i));
+
+                    JLabel lIdN = new JLabel(newNotiz.getName());
                     JLabel lUeberschriftN = new JLabel(ueberschrift.get(i));
                     JLabel lBeschreibungN = new JLabel(beschreibung.get(i));
-                    newPanel.add(lIdN);
-                    newPanel.add(lUeberschriftN);
-                    newPanel.add(lBeschreibungN);
-                    
+                    newNotiz.add(lIdN);
+                    newNotiz.add(lUeberschriftN);
+                    newNotiz.add(lBeschreibungN);
+
                     JButton btnEdit = new JButton("Bearbeiten");
                     btnEdit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             App.updateNotiz(lUeberschriftN.getText(),
-                                    lBeschreibungN.getText(), Integer.valueOf(newPanel.getName()));
-                            lUeberschriftN.setText(App.getUeberschrift(Integer.valueOf(newPanel.getName())));
-                            lBeschreibungN.setText(App.getBeschreibung(Integer.valueOf(newPanel.getName())));
+                                    lBeschreibungN.getText(), Integer.parseInt(newNotiz.getName()));
+                            lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
+                            lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
                             GUI.pack();
                         }
                     });
@@ -147,16 +146,16 @@ public class Notizen_UI {
                     btnDelete.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            panelContainer.remove(newPanel);
-                            App.deleteNotiz(Integer.valueOf(newPanel.getName()));
+                            panelContainer.remove(newNotiz);
+                            App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
                             GUI.pack();
                         }
                     });
-                    newPanel.add(btnDelete);
-                    newPanel.add(btnEdit);
-                    newPanel.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-                    
-                    panelContainer.add(newPanel);
+                    newNotiz.add(btnDelete);
+                    newNotiz.add(btnEdit);
+                    newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+
+                    panelContainer.add(newNotiz);
                     GUI.pack();
                 }
             }
