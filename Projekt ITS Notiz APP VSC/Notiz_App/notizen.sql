@@ -35,6 +35,10 @@ CREATE TABLE `kategorie` (
      PRIMARY KEY (`Kategorie_ID`)
 );
 
+INSERT INTO kategorie(Name) VALUE ("ToDo");
+INSERT INTO kategorie(Name) VALUE ("inProgress");
+INSERT INTO kategorie(Name) VALUE ("Done");
+
 DROP TABLE IF EXISTS `notiz`;
 
 CREATE TABLE `notiz` (
