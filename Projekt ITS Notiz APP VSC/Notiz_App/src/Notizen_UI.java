@@ -33,6 +33,12 @@ public class Notizen_UI extends App {
         tfUeberschrift = new JTextField("", 1); // Verwendung der Instanzvariable
         JLabel lBeschreibung = new JLabel("Beschreibung:");
         taBeschreibung = new JTextArea(3, 1); // Verwendung der Instanzvariable
+        ArrayList<String> KategorieListe = App.getKategorien(); //getten der Kategorien
+        String [] KategorieArray  = new String[KategorieListe.size()];
+        for(int i = 0; i < KategorieListe.size(); i++) KategorieArray[i] = KategorieListe.get(i);
+        JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
+
+
 
         eingabefeld.add(btnaddNotiz);
         eingabefeld.add(lUeberschrift);
@@ -41,6 +47,7 @@ public class Notizen_UI extends App {
         eingabefeld.add(taBeschreibung);
         JScrollPane scrollpane = new JScrollPane(taBeschreibung);
         eingabefeld.add(scrollpane);
+        eingabefeld.add(cbKategorieAuswahl);
 
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
 
@@ -51,8 +58,8 @@ public class Notizen_UI extends App {
                 newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
                                                                                // damit alles ordentlich angezeigt wird
 
-                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText())));
-                // Neue Notiz in der Datenbank erstellen mit der Überschrift und Beschreibung ^
+                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(), cbKategorieAuswahl.getSelectedItem())));
+                // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und Kategorie ^
 
                 JLabel lIdN = new JLabel(newNotiz.getName());
                 JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());

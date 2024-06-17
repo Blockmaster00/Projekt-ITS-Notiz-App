@@ -1,5 +1,6 @@
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -16,6 +17,23 @@ public class App {
      */
     public static void main(String[] args) {
         Notizen_UI.init();
+    }
+
+    public static ArrayList<String> getKategorien() {
+        ArrayList<String> kategorien = new ArrayList<>();
+        try {
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+            Statement statement = verbindung.createStatement();
+            ResultSet ergebnisse = statement.executeQuery("SELECT Name, FROM kategorie;");
+
+            while (ergebnisse.next()) {
+                kategorien.add(ergebnisse.getString(1));
+            }
+            return kategorien;
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim getten der Kategorien");
+        }
+        return kategorien;
     }
 
     public static String getUeberschrift(int Notiz_ID) {
@@ -66,13 +84,13 @@ public class App {
 
     }
 
-    public static int addNotiz(String ueberschrift, String beschreibung) {
+    public static int addNotiz(String ueberschrift, String beschreibung, Object Kategorie) {
 
         try {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung) VALUES (?, ?)";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
-                
+
                 preparedStatement.setString(1, ueberschrift);
                 preparedStatement.setString(2, beschreibung);
                 preparedStatement.executeUpdate();
@@ -85,7 +103,7 @@ public class App {
             int Notiz_ID = 0;
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 Statement statement = verbindung.createStatement();
-                
+
                 ResultSet ergebnisse = statement.executeQuery("SELECT MAX(Notiz_ID) FROM notiz;");
                 while (ergebnisse.next()) {
                     Notiz_ID = ergebnisse.getInt(1);
@@ -104,7 +122,7 @@ public class App {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 String sql = "DELETE FROM notiz Where Notiz_ID = (?)";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
-                
+
                 preparedStatement.setInt(1, notiz_ID);
                 preparedStatement.executeUpdate();
             }
@@ -120,7 +138,7 @@ public class App {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 String sql = "UPDATE notiz SET Ueberschrift = ?, Beschreibung = ? WHERE Notiz_ID = ?";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
-                
+
                 preparedStatement.setString(1, ueberschrift);
                 preparedStatement.setString(2, beschreibung);
                 preparedStatement.setString(3, String.valueOf(id));
