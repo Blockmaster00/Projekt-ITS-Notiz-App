@@ -34,9 +34,13 @@ public class Notizen_UI extends App {
         tfUeberschrift = new JTextField("", 1); // Verwendung der Instanzvariable
         JLabel lBeschreibung = new JLabel("Beschreibung:");
         taBeschreibung = new JTextArea(3, 1); // Verwendung der Instanzvariable
+
         ArrayList<String> KategorieListe = App.getKategorien(); //getten der Kategorien
+        KategorieListe.add("Kategorie1");
         String [] KategorieArray  = new String[KategorieListe.size()];
+
         for(int i = 0; i < KategorieListe.size(); i++) KategorieArray[i] = KategorieListe.get(i);
+
         @SuppressWarnings("rawtypes")
         JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
 
@@ -57,18 +61,24 @@ public class Notizen_UI extends App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newNotiz = new JPanel(); // neues Feld für Notiz wird erstellt
+                JPanel Namenfeld = new JPanel();
                 newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
                                                                                // damit alles ordentlich angezeigt wird
 
-                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(), cbKategorieAuswahl.getSelectedItem())));
+                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(), cbKategorieAuswahl.getSelectedIndex()+1)));
                 // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und Kategorie ^
 
                 JLabel lIdN = new JLabel(newNotiz.getName());
                 JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
                 JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
+                JLabel lKategorieN = new JLabel((String)cbKategorieAuswahl.getSelectedItem());
                 newNotiz.add(lIdN);
-                newNotiz.add(lUeberschriftN);
-                newNotiz.add(lBeschreibungN);
+
+                //Namenfeld
+                Namenfeld.add(lUeberschriftN);
+                Namenfeld.add(lBeschreibungN);
+
+                newNotiz.add(lKategorieN);
 
                 JButton btnEdit = new JButton("Bearbeiten");
                 btnEdit.addActionListener(new ActionListener() { // Button Bearbeiten
@@ -94,7 +104,9 @@ public class Notizen_UI extends App {
                 newNotiz.add(btnEdit);
                 newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 
+                //NewNotiz.add(Namenfeld);
                 panelContainer.add(newNotiz);
+                
                 GUI.pack();
             }
         });

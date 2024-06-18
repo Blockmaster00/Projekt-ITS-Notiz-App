@@ -84,15 +84,16 @@ public class App {
 
     }
 
-    public static int addNotiz(String ueberschrift, String beschreibung, Object Kategorie) {
+    public static int addNotiz(String ueberschrift, String beschreibung, Integer Kategorie_ID) {
 
         try {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
-                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung) VALUES (?, ?)";
+                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung, Kategorie_ID) VALUES (?, ?, ?)";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
                 preparedStatement.setString(1, ueberschrift);
                 preparedStatement.setString(2, beschreibung);
+                preparedStatement.setString(3, String.valueOf(Kategorie_ID));
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException ex) {

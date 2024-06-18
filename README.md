@@ -15,6 +15,6 @@
 ## FAQ: 
     - Die App wirft bei dem Start mehrere SQLExceptions und kann sich nicht mit der Datenbank verbinden, Wieso?
 
-    >Wer weiß mysterium liegt an dir du kek
+    >Wer weiß. Mysterium. Liegt an galaktischer Strahlung oder so.
     
 
