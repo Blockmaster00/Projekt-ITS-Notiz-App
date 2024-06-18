@@ -35,16 +35,14 @@ public class Notizen_UI extends App {
         JLabel lBeschreibung = new JLabel("Beschreibung:");
         taBeschreibung = new JTextArea(3, 1); // Verwendung der Instanzvariable
 
-        ArrayList<String> KategorieListe = App.getKategorien(); //getten der Kategorien
-        KategorieListe.add("Kategorie1");
-        String [] KategorieArray  = new String[KategorieListe.size()];
+        ArrayList<String> KategorieListe = App.getKategorien(); // getten der Kategorien
+        String[] KategorieArray = new String[KategorieListe.size()];
 
-        for(int i = 0; i < KategorieListe.size(); i++) KategorieArray[i] = KategorieListe.get(i);
+        for (int i = 0; i < KategorieListe.size(); i++)
+            KategorieArray[i] = KategorieListe.get(i);
 
         @SuppressWarnings("rawtypes")
         JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
-
-
 
         eingabefeld.add(btnaddNotiz);
         eingabefeld.add(lUeberschrift);
@@ -61,33 +59,40 @@ public class Notizen_UI extends App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JPanel newNotiz = new JPanel(); // neues Feld für Notiz wird erstellt
-                JPanel Namenfeld = new JPanel();
-                newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS)); // Feld bekommt Box Layout zugewiesen,
-                                                                               // damit alles ordentlich angezeigt wird
+                JPanel beschreibungsFeld = new JPanel(); // Felder um Notiz besser zu strukturieren
+                JPanel knoepfeFeld = new JPanel(); // ""
 
-                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(), cbKategorieAuswahl.getSelectedIndex()+1)));
-                // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und Kategorie ^
+                knoepfeFeld.setLayout(new BoxLayout(knoepfeFeld, BoxLayout.Y_AXIS));
+                beschreibungsFeld.setLayout(new BoxLayout(beschreibungsFeld, BoxLayout.Y_AXIS));
+                newNotiz.setLayout(new BorderLayout()); // Feld bekommt Box Layout zugewiesen,
+                                                        // damit alles ordentlich angezeigt wird
+
+                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
+                        cbKategorieAuswahl.getSelectedIndex() + 1)));
+                // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und
+                // Kategorie ^
 
                 JLabel lIdN = new JLabel(newNotiz.getName());
                 JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
+                Font font = new Font("Arial", Font.BOLD, 15);
+                lUeberschriftN.setFont(font);
                 JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
-                JLabel lKategorieN = new JLabel((String)cbKategorieAuswahl.getSelectedItem());
-                newNotiz.add(lIdN);
-
-                //Namenfeld
-                Namenfeld.add(lUeberschriftN);
-                Namenfeld.add(lBeschreibungN);
-
-                newNotiz.add(lKategorieN);
+                JLabel lKategorieN = new JLabel((String) cbKategorieAuswahl.getSelectedItem(), JLabel.CENTER);
+                newNotiz.add(lIdN, BorderLayout.NORTH);
+                beschreibungsFeld.add(lUeberschriftN);
+                beschreibungsFeld.add(lBeschreibungN);
+                newNotiz.add(lKategorieN, BorderLayout.SOUTH);
 
                 JButton btnEdit = new JButton("Bearbeiten");
                 btnEdit.addActionListener(new ActionListener() { // Button Bearbeiten
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         App.updateNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
+                                cbKategorieAuswahl.getSelectedIndex() + 1,
                                 Integer.parseInt(newNotiz.getName()));
                         lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
                         lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
+                        lKategorieN.setText((String) cbKategorieAuswahl.getSelectedItem());
                         GUI.pack();
                     }
                 });
@@ -100,13 +105,15 @@ public class Notizen_UI extends App {
                         GUI.pack();
                     }
                 });
-                newNotiz.add(btnDelete);
-                newNotiz.add(btnEdit);
+                knoepfeFeld.add(btnDelete, BorderLayout.EAST);
+                knoepfeFeld.add(btnEdit, BorderLayout.EAST);
+
                 newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 
-                //NewNotiz.add(Namenfeld);
                 panelContainer.add(newNotiz);
-                
+                newNotiz.add(beschreibungsFeld, BorderLayout.CENTER);
+                newNotiz.add(knoepfeFeld, BorderLayout.EAST);
+
                 GUI.pack();
             }
         });
@@ -124,12 +131,13 @@ public class Notizen_UI extends App {
             ArrayList<String> notizID = new ArrayList<>();
             ArrayList<String> ueberschrift = new ArrayList<>();
             ArrayList<String> beschreibung = new ArrayList<>();
+            ArrayList<Integer> kategorieID = new ArrayList<>();
 
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
                 Statement statement = verbindung.createStatement();
 
                 ResultSet ergebnisse = statement
-                        .executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID FROM notiz;");
+                        .executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID, Kategorie_ID FROM notiz;");
 
                 int anzReihen = 0;
                 while (ergebnisse.next()) {
@@ -137,27 +145,41 @@ public class Notizen_UI extends App {
                     ueberschrift.add(ergebnisse.getString(1));
                     beschreibung.add(ergebnisse.getString(2));
                     notizID.add(ergebnisse.getString(3));
+                    kategorieID.add(ergebnisse.getInt(4));
                 }
 
                 for (int i = 0; i < anzReihen; i++) {
                     JPanel newNotiz = new JPanel();
-                    newNotiz.setLayout(new BoxLayout(newNotiz, BoxLayout.Y_AXIS));
+                    JPanel beschreibungsFeld = new JPanel(); // Felder um Notiz besser zu strukturieren
+                    JPanel knoepfeFeld = new JPanel(); // ""
+
+                    knoepfeFeld.setLayout(new BoxLayout(knoepfeFeld, BoxLayout.Y_AXIS));
+                    beschreibungsFeld.setLayout(new BoxLayout(beschreibungsFeld, BoxLayout.Y_AXIS));
+                    newNotiz.setLayout(new BorderLayout());
 
                     newNotiz.setName(notizID.get(i));
 
                     JLabel lIdN = new JLabel(newNotiz.getName());
                     JLabel lUeberschriftN = new JLabel(ueberschrift.get(i));
                     JLabel lBeschreibungN = new JLabel(beschreibung.get(i));
-                    newNotiz.add(lIdN);
-                    newNotiz.add(lUeberschriftN);
-                    newNotiz.add(lBeschreibungN);
+
+                    Font font = new Font("Arial", Font.BOLD, 15);
+                    lUeberschriftN.setFont(font);
+
+                    JLabel lKategorieN = new JLabel((String) App.getKategorie(kategorieID.get(i)), JLabel.CENTER);
+
+                    newNotiz.add(lIdN, BorderLayout.NORTH);
+                    beschreibungsFeld.add(lUeberschriftN);
+                    beschreibungsFeld.add(lBeschreibungN);
+                    newNotiz.add(lKategorieN, BorderLayout.SOUTH);
 
                     JButton btnEdit = new JButton("Bearbeiten");
                     btnEdit.addActionListener(new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
                             App.updateNotiz(lUeberschriftN.getText(),
-                                    lBeschreibungN.getText(), Integer.parseInt(newNotiz.getName()));
+                                    lBeschreibungN.getText(), kategorieID.get(Integer.parseInt(newNotiz.getName())),
+                                    Integer.parseInt(newNotiz.getName()));
                             lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
                             lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
                             GUI.pack();
@@ -172,11 +194,14 @@ public class Notizen_UI extends App {
                             GUI.pack();
                         }
                     });
-                    newNotiz.add(btnDelete);
-                    newNotiz.add(btnEdit);
+                    knoepfeFeld.add(btnDelete);
+                    knoepfeFeld.add(btnEdit);
+
                     newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
 
                     panelContainer.add(newNotiz);
+                    newNotiz.add(beschreibungsFeld, BorderLayout.CENTER);
+                    newNotiz.add(knoepfeFeld, BorderLayout.EAST);
                     GUI.pack();
                 }
             }

@@ -19,12 +19,36 @@ public class App {
         Notizen_UI.init();
     }
 
+    public static String getKategorie(int Kategorie_ID) {
+        try {
+            String Kategorie = "error";
+
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+
+            String sql = ("SELECT Name FROM kategorie WHERE Kategorie_ID = ?");
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, String.valueOf(Kategorie_ID));
+            ResultSet ergebniss = preparedStatement.executeQuery();
+
+            while (ergebniss.next()) {
+                Kategorie = ergebniss.getString(1);
+            }
+
+            return (Kategorie);
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim getten der Überschrift");
+        }
+        return ("error2");
+
+    }
+
     public static ArrayList<String> getKategorien() {
         ArrayList<String> kategorien = new ArrayList<>();
         try {
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
             Statement statement = verbindung.createStatement();
-            ResultSet ergebnisse = statement.executeQuery("SELECT Name, FROM kategorie;");
+            ResultSet ergebnisse = statement.executeQuery("SELECT Name FROM kategorie;");
 
             while (ergebnisse.next()) {
                 kategorien.add(ergebnisse.getString(1));
@@ -133,16 +157,17 @@ public class App {
 
     }
 
-    public static void updateNotiz(String ueberschrift, String beschreibung, int id) {
+    public static void updateNotiz(String ueberschrift, String beschreibung, int kategorie_ID, int notiz_id) {
 
         try {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
-                String sql = "UPDATE notiz SET Ueberschrift = ?, Beschreibung = ? WHERE Notiz_ID = ?";
+                String sql = "UPDATE notiz SET Ueberschrift = ?, Beschreibung = ?, Kategorie_ID = ? WHERE Notiz_ID = ?";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
                 preparedStatement.setString(1, ueberschrift);
                 preparedStatement.setString(2, beschreibung);
-                preparedStatement.setString(3, String.valueOf(id));
+                preparedStatement.setString(3, String.valueOf(kategorie_ID));
+                preparedStatement.setString(4, String.valueOf(notiz_id));
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException ex) {
