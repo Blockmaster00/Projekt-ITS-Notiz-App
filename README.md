@@ -1,5 +1,6 @@
 # Projekt-ITS-Notiz-App
  
+## Anleitung
 
  1) XAMPP starten
 
@@ -11,8 +12,8 @@
     \Projekt-ITS-Notiz-App\Projekt ITS Notiz APP VSC\Notiz_App\App.java
 
 
-FAQ: 
-    - Die App wirft bei start mehrere SQLExceptions und kann sich nicht mit der Datenbank verbinden, Wieso?
+## FAQ: 
+    - Die App wirft bei dem Start mehrere SQLExceptions und kann sich nicht mit der Datenbank verbinden, Wieso?
 
     >Wer weiß mysterium liegt an dir du kek
     
