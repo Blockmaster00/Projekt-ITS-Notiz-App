@@ -21,6 +21,7 @@ public class Notizen_UI extends App {
 
     }
 
+    @SuppressWarnings("unchecked")
     public static void init() { // Initialisierung der GUI, erstes erstellen des Eingabefeldes und Buttons
 
         GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,6 +37,7 @@ public class Notizen_UI extends App {
         ArrayList<String> KategorieListe = App.getKategorien(); //getten der Kategorien
         String [] KategorieArray  = new String[KategorieListe.size()];
         for(int i = 0; i < KategorieListe.size(); i++) KategorieArray[i] = KategorieListe.get(i);
+        @SuppressWarnings("rawtypes")
         JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
 
 
