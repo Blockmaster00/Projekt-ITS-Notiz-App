@@ -51,9 +51,6 @@ CREATE TABLE `notiz` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
-
-
-/*
 DROP TABLE IF EXISTS `benutzer`;
 
 CREATE TABLE `benutzer` (
@@ -62,5 +59,5 @@ CREATE TABLE `benutzer` (
 	`Benutzer_ID` int NOT NULL auto_increment,
      PRIMARY KEY (`Benutzer_ID`)
 );
-*/
+
 

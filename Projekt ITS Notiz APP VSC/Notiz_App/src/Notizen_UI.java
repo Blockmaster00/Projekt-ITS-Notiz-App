@@ -44,6 +44,8 @@ public class Notizen_UI extends App {
         @SuppressWarnings("rawtypes")
         JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
 
+        // Deklarierung der Elemente
+
         eingabefeld.add(btnaddNotiz);
         eingabefeld.add(lUeberschrift);
         eingabefeld.add(tfUeberschrift);

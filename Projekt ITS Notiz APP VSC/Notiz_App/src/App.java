@@ -19,6 +19,53 @@ public class App {
         Notizen_UI.init();
     }
 
+    public static String registrieren(String Name, String Password) {
+        String status = "error";
+        try {
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+
+            String sql = ("SELECT BenutzerName FROM benutzer WHERE BenutzerName = ?");
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, Name);
+            ResultSet ergebniss = preparedStatement.executeQuery();
+
+            int i = 0;
+            while (ergebniss.next()) {
+                i++;
+            }
+
+            if (i > 0) {
+                status = "Nutzer bereits vorhanden";
+                System.out.println("Nutzer bereits vorhanden");
+            } else {
+                String sql_insert = ("INSERT INTO benutzer (BenutzerName, Password) VALUES (?, ?)");
+                PreparedStatement insertStatement = verbindung.prepareStatement(sql_insert);
+
+                insertStatement.setString(1, Name);
+                insertStatement.setString(2, Password);
+                insertStatement.executeUpdate();
+
+                status = "Nutzer erfolgreich erstellt";
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim registrieren eines Benutzers");
+        }
+        return status;
+    }
+
+    public static String anmelden(String Name, String Password) {
+        String status = "error";
+        try {
+            Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim anmelden eines Benutzers");
+        }
+        return status;
+    }
+
     public static String getKategorie(int Kategorie_ID) {
         try {
             String Kategorie = "error";

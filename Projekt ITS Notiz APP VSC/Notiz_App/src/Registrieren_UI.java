@@ -1,12 +1,13 @@
 import java.awt.*;
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-public class anmelde_UI {
-    static JFrame GUI = new JFrame("Anmelden");
+public class Registrieren_UI {
+    static JFrame GUI = new JFrame("Registrieren");
     static JPanel eingabeFeld = new JPanel();
 
     public static void main(String[] args) {
@@ -22,6 +23,7 @@ public class anmelde_UI {
         GUI.add(eingabeFeld, BorderLayout.CENTER);
 
         // GUI Elemente
+        JLabel lFeedback = new JLabel("");
 
         JLabel lBenutzerName = new JLabel("Benutzername:");
 
@@ -31,22 +33,27 @@ public class anmelde_UI {
 
         JPasswordField tfPassword = new JPasswordField(10);
 
-        JButton btnAnmelden = new JButton("Anmelden");
-        btnAnmelden.addActionListener(new ActionListener() {
+        JButton btnRegistrieren = new JButton("Registrieren");
+        btnRegistrieren.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                // App.anmelden(tfBenutzerName.getText(), tfPassword.getAccessibleContext());
+                char[] password = tfPassword.getPassword();
+                String passwordString = new String(password);
+
+                lFeedback.setText(App.registrieren(tfBenutzerName.getText(), passwordString));
+
             }
         });
 
-        JLabel lRegistrieren = new JLabel("Hier klicken um neuen Account zu registrieren.");
+        JLabel lAnmelden = new JLabel("Hier klicken zum Anmelden.");
         Font font = new Font("Arial", Font.CENTER_BASELINE, 11);
-        lRegistrieren.setFont(font);
-        lRegistrieren.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lAnmelden.setFont(font);
+        lAnmelden.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        lRegistrieren.addMouseListener(new MouseAdapter() {
-            public void mouseclicked(MouseEvent evt) {
-                // registrieren ...
+        lAnmelden.addMouseListener(new MouseAdapter() {
+            public void mouseclicked(MouseEvent e) {
+                GUI.dispose();
+                anmelde_UI.init();
             }
         });
 
@@ -59,17 +66,19 @@ public class anmelde_UI {
         c.insets = new Insets(10, 10, 10, 10); // Abstand zwischen den Komponenten
 
         c.gridy = 0;
-        eingabeFeld.add(lBenutzerName, c);
+        eingabeFeld.add(lFeedback, c);
         c.gridy = 1;
-        eingabeFeld.add(tfBenutzerName, c);
+        eingabeFeld.add(lBenutzerName, c);
         c.gridy = 2;
-        eingabeFeld.add(lPassword, c);
+        eingabeFeld.add(tfBenutzerName, c);
         c.gridy = 3;
-        eingabeFeld.add(tfPassword, c);
+        eingabeFeld.add(lPassword, c);
         c.gridy = 4;
-        eingabeFeld.add(btnAnmelden, c);
+        eingabeFeld.add(tfPassword, c);
         c.gridy = 5;
-        eingabeFeld.add(lRegistrieren, c);
+        eingabeFeld.add(btnRegistrieren, c);
+        c.gridy = 6;
+        eingabeFeld.add(lAnmelden, c);
 
         GUI.setVisible(true);
     }
