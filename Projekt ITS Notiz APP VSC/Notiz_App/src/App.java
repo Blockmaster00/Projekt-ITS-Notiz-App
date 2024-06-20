@@ -56,14 +56,24 @@ public class App {
     }
 
     public static String anmelden(String Name, String Password) {
-        String status = "error";
+        String id = "error";
         try {
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
+            String sql = ("SELECT Benutzer_ID FROM benutzer WHERE BenutzerName = ? AND Password = ?");
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, Name);
+            preparedStatement.setString(2, Password);
+            ResultSet ergebniss = preparedStatement.executeQuery();
+
+            while (ergebniss.next()) {
+                id = ergebniss.getString(1);
+            }
 
         } catch (SQLException ex) {
             System.out.println("SQLException beim anmelden eines Benutzers");
         }
-        return status;
+        return id;
     }
 
     public static String getKategorie(int Kategorie_ID) {

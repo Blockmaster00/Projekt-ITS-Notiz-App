@@ -53,7 +53,7 @@ public class Registrieren_UI {
         lAnmelden.addMouseListener(new MouseAdapter() {
             public void mouseclicked(MouseEvent e) {
                 GUI.dispose();
-                anmelde_UI.init();
+                Anmelde_UI.init();
             }
         });
 

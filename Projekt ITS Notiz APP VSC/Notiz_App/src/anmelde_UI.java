@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
 
-public class anmelde_UI {
+public class Anmelde_UI {
     static JFrame GUI = new JFrame("Anmelden");
     static JPanel eingabeFeld = new JPanel();
 
@@ -35,7 +35,10 @@ public class anmelde_UI {
         btnAnmelden.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                // App.anmelden(tfBenutzerName.getText(), tfPassword.getAccessibleContext());
+                char[] password = tfPassword.getPassword();
+                String passwordString = new String(password);
+
+                App.anmelden(tfBenutzerName.getText(), passwordString);
             }
         });
 
@@ -46,7 +49,8 @@ public class anmelde_UI {
 
         lRegistrieren.addMouseListener(new MouseAdapter() {
             public void mouseclicked(MouseEvent evt) {
-                // registrieren ...
+                GUI.dispose();
+                Registrieren_UI.init();
             }
         });
 
