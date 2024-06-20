@@ -22,13 +22,14 @@ public class Notizen_UI extends App {
     }
 
     @SuppressWarnings("unchecked")
-    public static void init() { // Initialisierung der GUI, erstes erstellen des Eingabefeldes und Buttons
-
+    public static void init(Integer Benutzer_ID) { // Initialisierung der GUI, erstes erstellen des Eingabefeldes und
+                                                   // Buttons
         GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         GUI.setLayout(new BorderLayout());
 
         eingabefeld.setLayout(new BoxLayout(eingabefeld, BoxLayout.Y_AXIS));
 
+        JButton btnRefreshNotizen = new JButton("Refresh");
         JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
         JLabel lUeberschrift = new JLabel("Überschrift:");
         tfUeberschrift = new JTextField("", 1); // Verwendung der Instanzvariable
@@ -45,7 +46,7 @@ public class Notizen_UI extends App {
         JComboBox cbKategorieAuswahl = new JComboBox(KategorieArray);
 
         // Deklarierung der Elemente
-
+        eingabefeld.add(btnRefreshNotizen);
         eingabefeld.add(btnaddNotiz);
         eingabefeld.add(lUeberschrift);
         eingabefeld.add(tfUeberschrift);
@@ -56,6 +57,12 @@ public class Notizen_UI extends App {
         eingabefeld.add(cbKategorieAuswahl);
 
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
+
+        btnRefreshNotizen.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                getNotizen(Benutzer_ID);
+            }
+        });
 
         btnaddNotiz.addActionListener(new ActionListener() {
             @Override
@@ -70,7 +77,7 @@ public class Notizen_UI extends App {
                                                         // damit alles ordentlich angezeigt wird
 
                 newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
-                        cbKategorieAuswahl.getSelectedIndex() + 1)));
+                        cbKategorieAuswahl.getSelectedIndex() + 1, Benutzer_ID)));
                 // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und
                 // Kategorie ^
 
@@ -117,7 +124,9 @@ public class Notizen_UI extends App {
                 newNotiz.add(knoepfeFeld, BorderLayout.EAST);
 
                 GUI.pack();
+
             }
+
         });
 
         GUI.add(eingabefeld, BorderLayout.NORTH);
@@ -125,10 +134,9 @@ public class Notizen_UI extends App {
         GUI.pack();
         GUI.setVisible(true);
 
-        getNotizen();
     }
 
-    public static void getNotizen() {
+    public static void getNotizen(int Benutzer_ID) {
         try {
             ArrayList<String> notizID = new ArrayList<>();
             ArrayList<String> ueberschrift = new ArrayList<>();
@@ -136,10 +144,11 @@ public class Notizen_UI extends App {
             ArrayList<Integer> kategorieID = new ArrayList<>();
 
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
-                Statement statement = verbindung.createStatement();
+                String sql = "SELECT Ueberschrift, Beschreibung, Notiz_ID, Kategorie_ID FROM notiz WHERE Benutzer_ID = ?;";
+                PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
-                ResultSet ergebnisse = statement
-                        .executeQuery("SELECT Ueberschrift, Beschreibung, Notiz_ID, Kategorie_ID FROM notiz;");
+                preparedStatement.setString(1, String.valueOf(Benutzer_ID));
+                ResultSet ergebnisse = preparedStatement.executeQuery();
 
                 int anzReihen = 0;
                 while (ergebnisse.next()) {

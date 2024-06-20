@@ -46,6 +46,8 @@ CREATE TABLE `notiz` (
 	`Beschreibung` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
     `Kategorie_ID` int,
     foreign key(kategorie_ID) references kategorie(Kategorie_ID),
+	`Benutzer_ID`	int,
+	foreign key(Benutzer_ID) references benutzer(Benutzer_ID),
 	`Notiz_ID` int NOT NULL auto_increment,
      PRIMARY KEY (`Notiz_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;

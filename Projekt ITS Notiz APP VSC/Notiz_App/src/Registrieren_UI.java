@@ -8,77 +8,85 @@ import javax.swing.*;
 public class Registrieren_UI {
     static JFrame GUI = new JFrame("Registrieren");
     static JPanel eingabeFeld = new JPanel();
+    public static boolean initialisiert = false;
 
     public static void main(String[] args) {
         init();
+
     }
 
     public static void init() {
-        GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (initialisiert) {
+            GUI.setVisible(true);
+        } else {
 
-        GUI.setLayout(new BorderLayout());
-        eingabeFeld.setLayout(new BoxLayout(eingabeFeld, BoxLayout.Y_AXIS));
+            GUI.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        GUI.add(eingabeFeld, BorderLayout.CENTER);
+            GUI.setLayout(new BorderLayout());
+            eingabeFeld.setLayout(new BoxLayout(eingabeFeld, BoxLayout.Y_AXIS));
 
-        // GUI Elemente
-        JLabel lFeedback = new JLabel("");
+            GUI.add(eingabeFeld, BorderLayout.CENTER);
 
-        JLabel lBenutzerName = new JLabel("Benutzername:");
+            // GUI Elemente
+            JLabel lFeedback = new JLabel("");
 
-        JTextField tfBenutzerName = new JTextField(10);
+            JLabel lBenutzerName = new JLabel("Benutzername:");
 
-        JLabel lPassword = new JLabel("Password:");
+            JTextField tfBenutzerName = new JTextField(10);
 
-        JPasswordField tfPassword = new JPasswordField(10);
+            JLabel lPassword = new JLabel("Password:");
 
-        JButton btnRegistrieren = new JButton("Registrieren");
-        btnRegistrieren.addActionListener(new ActionListener() {
+            JPasswordField tfPassword = new JPasswordField(10);
 
-            public void actionPerformed(ActionEvent e) {
-                char[] password = tfPassword.getPassword();
-                String passwordString = new String(password);
+            JButton btnRegistrieren = new JButton("Registrieren");
+            btnRegistrieren.addActionListener(new ActionListener() {
 
-                lFeedback.setText(App.registrieren(tfBenutzerName.getText(), passwordString));
+                public void actionPerformed(ActionEvent e) {
+                    char[] password = tfPassword.getPassword();
+                    String passwordString = new String(password);
 
-            }
-        });
+                    lFeedback.setText(App.registrieren(tfBenutzerName.getText(), passwordString));
 
-        JLabel lAnmelden = new JLabel("Hier klicken zum Anmelden.");
-        Font font = new Font("Arial", Font.CENTER_BASELINE, 11);
-        lAnmelden.setFont(font);
-        lAnmelden.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                }
+            });
 
-        lAnmelden.addMouseListener(new MouseAdapter() {
-            public void mouseclicked(MouseEvent e) {
-                GUI.dispose();
-                Anmelde_UI.init();
-            }
-        });
+            JLabel lAnmelden = new JLabel("Hier klicken zum Anmelden.");
+            Font font = new Font("Arial", Font.CENTER_BASELINE, 11);
+            lAnmelden.setFont(font);
+            lAnmelden.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        GUI.setSize(350, 350);
-        eingabeFeld.setSize(100, 100);
+            lAnmelden.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent e) {
+                    GUI.setVisible(false);
+                    Anmelde_UI.init();
+                }
+            });
 
-        eingabeFeld.setLayout(new GridBagLayout()); // Verwende ein GridBagLayout für präzise Positionierung
+            GUI.setSize(350, 350);
+            eingabeFeld.setSize(100, 100);
 
-        GridBagConstraints c = new GridBagConstraints();
-        c.insets = new Insets(10, 10, 10, 10); // Abstand zwischen den Komponenten
+            eingabeFeld.setLayout(new GridBagLayout()); // Verwende ein GridBagLayout für präzise Positionierung
 
-        c.gridy = 0;
-        eingabeFeld.add(lFeedback, c);
-        c.gridy = 1;
-        eingabeFeld.add(lBenutzerName, c);
-        c.gridy = 2;
-        eingabeFeld.add(tfBenutzerName, c);
-        c.gridy = 3;
-        eingabeFeld.add(lPassword, c);
-        c.gridy = 4;
-        eingabeFeld.add(tfPassword, c);
-        c.gridy = 5;
-        eingabeFeld.add(btnRegistrieren, c);
-        c.gridy = 6;
-        eingabeFeld.add(lAnmelden, c);
+            GridBagConstraints c = new GridBagConstraints();
+            c.insets = new Insets(10, 10, 10, 10); // Abstand zwischen den Komponenten
 
-        GUI.setVisible(true);
+            c.gridy = 0;
+            eingabeFeld.add(lFeedback, c);
+            c.gridy = 1;
+            eingabeFeld.add(lBenutzerName, c);
+            c.gridy = 2;
+            eingabeFeld.add(tfBenutzerName, c);
+            c.gridy = 3;
+            eingabeFeld.add(lPassword, c);
+            c.gridy = 4;
+            eingabeFeld.add(tfPassword, c);
+            c.gridy = 5;
+            eingabeFeld.add(btnRegistrieren, c);
+            c.gridy = 6;
+            eingabeFeld.add(lAnmelden, c);
+
+            GUI.setVisible(true);
+            initialisiert = true;
+        }
     }
 }

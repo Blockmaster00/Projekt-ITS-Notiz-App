@@ -16,7 +16,7 @@ public class App {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Notizen_UI.init();
+        Anmelde_UI.init();
     }
 
     public static String registrieren(String Name, String Password) {
@@ -55,8 +55,8 @@ public class App {
         return status;
     }
 
-    public static String anmelden(String Name, String Password) {
-        String id = "error";
+    public static Integer anmelden(String Name, String Password) {
+        int id = -1;
         try {
             Connection verbindung = DriverManager.getConnection(connectionURL, user, password);
             String sql = ("SELECT Benutzer_ID FROM benutzer WHERE BenutzerName = ? AND Password = ?");
@@ -67,7 +67,7 @@ public class App {
             ResultSet ergebniss = preparedStatement.executeQuery();
 
             while (ergebniss.next()) {
-                id = ergebniss.getString(1);
+                id = ergebniss.getInt(1);
             }
 
         } catch (SQLException ex) {
@@ -165,16 +165,17 @@ public class App {
 
     }
 
-    public static int addNotiz(String ueberschrift, String beschreibung, Integer Kategorie_ID) {
+    public static int addNotiz(String ueberschrift, String beschreibung, Integer Kategorie_ID, Integer Benutzer_ID) {
 
         try {
             try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
-                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung, Kategorie_ID) VALUES (?, ?, ?)";
+                String sql = "INSERT INTO notiz (Ueberschrift, Beschreibung, Kategorie_ID, Benutzer_ID) VALUES (?, ?, ?, ?)";
                 PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
 
                 preparedStatement.setString(1, ueberschrift);
                 preparedStatement.setString(2, beschreibung);
                 preparedStatement.setString(3, String.valueOf(Kategorie_ID));
+                preparedStatement.setString(4, String.valueOf(Benutzer_ID));
                 preparedStatement.executeUpdate();
             }
         } catch (SQLException ex) {
