@@ -35,9 +35,16 @@ CREATE TABLE `kategorie` (
      PRIMARY KEY (`Kategorie_ID`)
 );
 
-INSERT INTO kategorie(Name) VALUE ("ToDo");
-INSERT INTO kategorie(Name) VALUE ("inProgress");
-INSERT INTO kategorie(Name) VALUE ("Done");
+
+DROP TABLE IF EXISTS `benutzer`;
+
+CREATE TABLE `benutzer` (
+	`BenutzerName` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+	`Password` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+	`Benutzer_ID` int NOT NULL auto_increment,
+     PRIMARY KEY (`Benutzer_ID`)
+);
+
 
 DROP TABLE IF EXISTS `notiz`;
 
@@ -52,14 +59,9 @@ CREATE TABLE `notiz` (
      PRIMARY KEY (`Notiz_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+INSERT INTO kategorie(Name) VALUE ("ToDo");
+INSERT INTO kategorie(Name) VALUE ("inProgress");
+INSERT INTO kategorie(Name) VALUE ("Done");
 
-DROP TABLE IF EXISTS `benutzer`;
-
-CREATE TABLE `benutzer` (
-	`BenutzerName` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-	`Password` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-	`Benutzer_ID` int NOT NULL auto_increment,
-     PRIMARY KEY (`Benutzer_ID`)
-);
 
 
