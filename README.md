@@ -15,7 +15,21 @@
 
  1) Im Anmelde Fenster unten auf "neuen Benutzer erstellen" klicken.
     - neues Fenster öffnet sich.
- 2)
+      
+ 2) Benutzer-Name und Password ausfüllen und auf Registrieren klicken
+    - Falls die Meldung kommt, dass dieser Benutzer bereits besteht:
+      einen anderen Benutzer-Namen wählen.
+
+ 3) Zurück zur Anmelde Seite kehren und mit dem erstellten Daten dort anmelden.
+
+ 4) Notizen Ansicht öffnet sich. Hier können Notizen erstellt und bearbeitet werden.
+    - Refresh Knopf: gettet alle Notizen von der Datenbank auf die du zugriff hast.
+    - Notiz hinzufügen Knopf: erstellt eine neue Notiz mit den Eingaben in den Textfelder darunter.
+      ordnet die Notiz direkt in die ausgewählte Kategorie ein.
+
+      Knöpfe an der Notiz:
+    - Löschen Knopf: löscht die Notiz
+    - Bearbeiten Knopf: bearbeitet die notiz mit den eingaben in den obigen Feldern
 
 
 ## FAQ: 
