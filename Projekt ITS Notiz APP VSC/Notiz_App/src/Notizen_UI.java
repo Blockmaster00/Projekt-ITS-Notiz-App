@@ -31,13 +31,15 @@ public class Notizen_UI extends App {
         eingabeFeld.setLayout(new BoxLayout(eingabeFeld, BoxLayout.Y_AXIS));
 
         // Deklarierung der Elemente
+        // toolbar
         JButton btnRefreshNotizen = new JButton("Refresh");
         JButton btnaddNotiz = new JButton("Neue Notiz hinzufügen");
+        // eingabeFeld
         JLabel lUeberschrift = new JLabel("Überschrift:");
         tfUeberschrift = new JTextField("", 1); // Verwendung der Instanzvariable
         JLabel lBeschreibung = new JLabel("Beschreibung:");
         taBeschreibung = new JTextArea(3, 1); // Verwendung der Instanzvariable
-
+        // KategorieFeld
         JTextField tfKategorie = new JTextField("", 10);
         JButton btnKategorieAdd = new JButton("Kategorie hinzufügen");
         ArrayList<String> KategorieListe = App.getKategorien(); // getten der Kategorien
@@ -55,8 +57,10 @@ public class Notizen_UI extends App {
 
         kategorieFeld.add(tfKategorie);
         kategorieFeld.add(btnKategorieAdd);
+
         tbar.add(btnRefreshNotizen);
         tbar.add(btnaddNotiz);
+
         eingabeFeld.add(lUeberschrift);
         eingabeFeld.add(tfUeberschrift);
         eingabeFeld.add(lBeschreibung);
