@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.*;
@@ -39,15 +38,11 @@ public class Registrieren_UI {
             JPasswordField tfPassword = new JPasswordField(10);
 
             JButton btnRegistrieren = new JButton("Registrieren");
-            btnRegistrieren.addActionListener(new ActionListener() {
+            btnRegistrieren.addActionListener((ActionEvent e) -> {
+                char[] password = tfPassword.getPassword();
+                String passwordString = new String(password);
 
-                public void actionPerformed(ActionEvent e) {
-                    char[] password = tfPassword.getPassword();
-                    String passwordString = new String(password);
-
-                    lFeedback.setText(App.registrieren(tfBenutzerName.getText(), passwordString));
-
-                }
+                lFeedback.setText(App.registrieren(tfBenutzerName.getText(), passwordString));
             });
 
             JLabel lAnmelden = new JLabel("Hier klicken zum Anmelden.");
@@ -56,6 +51,7 @@ public class Registrieren_UI {
             lAnmelden.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
             lAnmelden.addMouseListener(new MouseAdapter() {
+                @Override
                 public void mouseClicked(MouseEvent e) {
                     GUI.setVisible(false);
                     Anmelde_UI.init();

@@ -1,7 +1,6 @@
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.*;
@@ -68,93 +67,78 @@ public class Notizen_UI extends App {
 
         panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
 
-        btnKategorieAdd.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                if (!"".equals(tfKategorie.getText())) {
-                    App.addKategorie(tfKategorie.getText());
-
-                    cbKategorieAuswahl.removeAllItems();
-
-                    ArrayList<String> KategorieListe = App.getKategorien(); // getten der Kategorien
-                    for (int i = 0; i < KategorieListe.size(); i++) {
-                        cbKategorieAuswahl.addItem(KategorieListe.get(i));
-                    }
+        btnKategorieAdd.addActionListener((ActionEvent e) -> {
+            if (!"".equals(tfKategorie.getText())) {
+                App.addKategorie(tfKategorie.getText());
+                cbKategorieAuswahl.removeAllItems();
+                ArrayList<String> KategorieListe1 = App.getKategorien(); // getten der Kategorien
+                for (int i = 0; i < KategorieListe1.size(); i++) {
+                    cbKategorieAuswahl.addItem(KategorieListe1.get(i));
                 }
             }
         });
 
-        btnRefreshNotizen.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                panelContainer.removeAll();
-                getNotizen(Benutzer_ID);
-            }
+        btnRefreshNotizen.addActionListener((ActionEvent e) -> {
+            panelContainer.removeAll();
+            getNotizen(Benutzer_ID);
         });
 
-        btnaddNotiz.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!"".equals(tfUeberschrift.getText())) {
-                    JPanel newNotiz = new JPanel(); // neues Feld für Notiz wird erstellt
-                    JPanel beschreibungsFeld = new JPanel(); // Felder um Notiz besser zu strukturieren
-                    JPanel knoepfeFeld = new JPanel(); // ""
+        btnaddNotiz.addActionListener((ActionEvent e) -> {
+            if (!"".equals(tfUeberschrift.getText())) {
+                JPanel newNotiz = new JPanel(); // neues Feld für Notiz wird erstellt
+                JPanel beschreibungsFeld = new JPanel(); // Felder um Notiz besser zu strukturieren
+                JPanel knoepfeFeld = new JPanel(); // ""
 
-                    knoepfeFeld.setLayout(new BoxLayout(knoepfeFeld, BoxLayout.Y_AXIS));
-                    beschreibungsFeld.setLayout(new BoxLayout(beschreibungsFeld, BoxLayout.Y_AXIS));
-                    newNotiz.setLayout(new BorderLayout()); // Feld bekommt Box Layout zugewiesen,
-                                                            // damit alles ordentlich angezeigt wird
+                knoepfeFeld.setLayout(new BoxLayout(knoepfeFeld, BoxLayout.Y_AXIS));
+                beschreibungsFeld.setLayout(new BoxLayout(beschreibungsFeld, BoxLayout.Y_AXIS));
+                newNotiz.setLayout(new BorderLayout()); // Feld bekommt Box Layout zugewiesen,
+                // damit alles ordentlich angezeigt wird
 
-                    newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
-                            cbKategorieAuswahl.getSelectedIndex() + 1, Benutzer_ID)));
-                    // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und
-                    // Kategorie ^
+                newNotiz.setName(String.valueOf(App.addNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
+                        cbKategorieAuswahl.getSelectedIndex() + 1, Benutzer_ID)));
+                // Neue Notiz in der Datenbank erstellen mit der Überschrift, Beschreibung und
+                // Kategorie ^
 
-                    JLabel lIdN = new JLabel(newNotiz.getName());
-                    JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
-                    Font font = new Font("Arial", Font.BOLD, 15);
-                    lUeberschriftN.setFont(font);
-                    JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
-                    JLabel lKategorieN = new JLabel((String) cbKategorieAuswahl.getSelectedItem(), JLabel.CENTER);
-                    newNotiz.add(lIdN, BorderLayout.NORTH);
-                    beschreibungsFeld.add(lUeberschriftN);
-                    beschreibungsFeld.add(lBeschreibungN);
-                    newNotiz.add(lKategorieN, BorderLayout.SOUTH);
+                JLabel lIdN = new JLabel(newNotiz.getName());
+                JLabel lUeberschriftN = new JLabel(tfUeberschrift.getText());
+                Font font = new Font("Arial", Font.BOLD, 15);
+                lUeberschriftN.setFont(font);
+                JLabel lBeschreibungN = new JLabel(taBeschreibung.getText());
+                JLabel lKategorieN = new JLabel((String) cbKategorieAuswahl.getSelectedItem(), JLabel.CENTER);
+                newNotiz.add(lIdN, BorderLayout.NORTH);
+                beschreibungsFeld.add(lUeberschriftN);
+                beschreibungsFeld.add(lBeschreibungN);
+                newNotiz.add(lKategorieN, BorderLayout.SOUTH);
 
-                    JButton btnEdit = new JButton("Bearbeiten");
-                    btnEdit.addActionListener(new ActionListener() { // Button Bearbeiten
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            App.updateNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
-                                    cbKategorieAuswahl.getSelectedIndex() + 1,
-                                    Integer.parseInt(newNotiz.getName()));
-                            lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
-                            lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
-                            lKategorieN.setText((String) cbKategorieAuswahl.getSelectedItem());
-                            GUI.pack();
-                        }
-                    });
-                    JButton btnDelete = new JButton("Löschen");
-                    btnDelete.addActionListener(new ActionListener() { // Button Löschen
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
-                            panelContainer.remove(newNotiz);
-                            GUI.pack();
-                        }
-                    });
-                    knoepfeFeld.add(btnDelete, BorderLayout.EAST);
-                    knoepfeFeld.add(btnEdit, BorderLayout.EAST);
-
-                    newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
-
-                    panelContainer.add(newNotiz);
-                    newNotiz.add(beschreibungsFeld, BorderLayout.CENTER);
-                    newNotiz.add(knoepfeFeld, BorderLayout.EAST);
-
+                JButton btnEdit = new JButton("Bearbeiten");
+                btnEdit.addActionListener((ActionEvent e1) -> {
+                    App.updateNotiz(tfUeberschrift.getText(), taBeschreibung.getText(),
+                            cbKategorieAuswahl.getSelectedIndex() + 1,
+                            Integer.parseInt(newNotiz.getName()));
+                    lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
+                    lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
+                    lKategorieN.setText((String) cbKategorieAuswahl.getSelectedItem());
                     GUI.pack();
-                }
+                } // Button Bearbeiten
+                );
+                JButton btnDelete = new JButton("Löschen");
+                btnDelete.addActionListener((ActionEvent e1) -> {
+                    App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
+                    panelContainer.remove(newNotiz);
+                    GUI.pack();
+                } // Button LÃ¶schen
+                );
+                knoepfeFeld.add(btnDelete, BorderLayout.EAST);
+                knoepfeFeld.add(btnEdit, BorderLayout.EAST);
 
+                newNotiz.setBorder(BorderFactory.createLineBorder(Color.black, 3));
+
+                panelContainer.add(newNotiz);
+                newNotiz.add(beschreibungsFeld, BorderLayout.CENTER);
+                newNotiz.add(knoepfeFeld, BorderLayout.EAST);
+
+                GUI.pack();
             }
-
         });
 
         GUI.add(eingabeFeld, BorderLayout.NORTH);
@@ -214,25 +198,19 @@ public class Notizen_UI extends App {
                     newNotiz.add(lKategorieN, BorderLayout.SOUTH);
 
                     JButton btnEdit = new JButton("Bearbeiten");
-                    btnEdit.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            App.updateNotiz(lUeberschriftN.getText(),
-                                    lBeschreibungN.getText(), kategorieID.get(Integer.parseInt(newNotiz.getName())),
-                                    Integer.parseInt(newNotiz.getName()));
-                            lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
-                            lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
-                            GUI.pack();
-                        }
+                    btnEdit.addActionListener((ActionEvent e) -> {
+                        App.updateNotiz(lUeberschriftN.getText(),
+                                lBeschreibungN.getText(), kategorieID.get(Integer.parseInt(newNotiz.getName())),
+                                Integer.parseInt(newNotiz.getName()));
+                        lUeberschriftN.setText(App.getUeberschrift(Integer.parseInt(newNotiz.getName())));
+                        lBeschreibungN.setText(App.getBeschreibung(Integer.parseInt(newNotiz.getName())));
+                        GUI.pack();
                     });
                     JButton btnDelete = new JButton("Löschen");
-                    btnDelete.addActionListener(new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            panelContainer.remove(newNotiz);
-                            App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
-                            GUI.pack();
-                        }
+                    btnDelete.addActionListener((ActionEvent e) -> {
+                        panelContainer.remove(newNotiz);
+                        App.deleteNotiz(Integer.parseInt(newNotiz.getName()));
+                        GUI.pack();
                     });
                     knoepfeFeld.add(btnDelete);
                     knoepfeFeld.add(btnEdit);
