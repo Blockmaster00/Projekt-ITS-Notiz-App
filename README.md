@@ -22,14 +22,21 @@
 
  3) Zurück zur Anmelde Seite kehren und mit dem erstellten Daten dort anmelden.
 
- 4) Notizen Ansicht öffnet sich. Hier können Notizen erstellt und bearbeitet werden.
+## Notizen managen
+
+ 1) Notizen Ansicht öffnet sich. Hier können Notizen erstellt und bearbeitet werden.
+      Tool Leiste:
     - Refresh Knopf: gettet alle Notizen von der Datenbank auf die du zugriff hast.
     - Notiz hinzufügen Knopf: erstellt eine neue Notiz mit den Eingaben in den Textfelder darunter.
       ordnet die Notiz direkt in die ausgewählte Kategorie ein.
+   
+      Kategorie auswahl und eingabe:
+    - hier Kategorie auswählen mit der die Notiz versehen werden soll
+    - darunter können neue Kategorien erstellt werden
 
       Knöpfe an der Notiz:
     - Löschen Knopf: löscht die Notiz
-    - Bearbeiten Knopf: bearbeitet die notiz mit den eingaben in den obigen Feldern
+    - Bearbeiten Knopf: bearbeitet die notiz mit den eingaben in den obigen Feldern.
 
 
 ## FAQ: 
