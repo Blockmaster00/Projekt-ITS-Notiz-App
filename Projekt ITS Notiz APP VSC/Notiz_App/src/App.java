@@ -76,6 +76,19 @@ public class App {
         return id;
     }
 
+    public static void addKategorie(String Name) {
+        try (Connection verbindung = DriverManager.getConnection(connectionURL, user, password)) {
+            String sql = "INSERT INTO kategorie (Name) VALUES (?)";
+            PreparedStatement preparedStatement = verbindung.prepareStatement(sql);
+
+            preparedStatement.setString(1, Name);
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException ex) {
+            System.out.println("SQLException beim adden einer Kategorie");
+        }
+    }
+
     public static String getKategorie(int Kategorie_ID) {
         try {
             String Kategorie = "error";
